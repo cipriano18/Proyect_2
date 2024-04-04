@@ -115,6 +115,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        Menu v=new Menu();
         v.abrir(); 
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

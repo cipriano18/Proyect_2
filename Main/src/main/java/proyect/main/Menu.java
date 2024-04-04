@@ -1,8 +1,5 @@
 package proyect.main;
 
-import java.util.Set;
-import javax.swing.JOptionPane;
-
 public class Menu extends javax.swing.JFrame {
 
     public Menu() {
@@ -102,20 +99,13 @@ public class Menu extends javax.swing.JFrame {
         vi.setVisible(true);
         vi.setLocationRelativeTo(null);
         vi.setTitle("Crear_talonario");
+        dispose();
     }//GEN-LAST:event_createActionPerformed
 public void abrir(){
     Menu vista=new Menu();
     vista.setLocationRelativeTo(null);
+    vista.setTitle("Menu_talonario");
     vista.setVisible(true); 
-    vista.dispose();
-       System.out.println("ENTRA");
-    if (create.getModel().isPressed()) {
-        JOptionPane.showInputDialog("Hola");
-        System.out.println("El botón ha sido presionado.");
-     }
-    else{
-        System.out.println("jeje");
-    }
 }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       
