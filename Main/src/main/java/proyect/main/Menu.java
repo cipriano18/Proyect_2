@@ -1,5 +1,8 @@
 package proyect.main;
 
+import java.util.Set;
+import javax.swing.JOptionPane;
+
 public class Menu extends javax.swing.JFrame {
 
     public Menu() {
@@ -95,21 +98,29 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
-        // TODO add your handling code here:
+        InterfaceLottery vi = new InterfaceLottery();
+        vi.setVisible(true);
+        vi.setLocationRelativeTo(null);
+        vi.setTitle("Crear_talonario");
     }//GEN-LAST:event_createActionPerformed
-
+public void abrir(){
+    Menu vista=new Menu();
+    vista.setLocationRelativeTo(null);
+    vista.setVisible(true); 
+    vista.dispose();
+       System.out.println("ENTRA");
+    if (create.getModel().isPressed()) {
+        JOptionPane.showInputDialog("Hola");
+        System.out.println("El botón ha sido presionado.");
+     }
+    else{
+        System.out.println("jeje");
+    }
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    static void main(String args[]) {
-      
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Menu().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton create;

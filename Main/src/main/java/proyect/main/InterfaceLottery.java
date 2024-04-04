@@ -113,8 +113,8 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.out.println("Hola");
-       
+       Menu v=new Menu();
+        v.abrir(); 
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
