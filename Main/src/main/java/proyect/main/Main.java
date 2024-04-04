@@ -3,6 +3,8 @@ package proyect.main;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Menu vista=new Menu();
+        vista.setLocationRelativeTo(null);
+        vista.setVisible(true);
     }
 }
