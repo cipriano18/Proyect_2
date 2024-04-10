@@ -113,7 +113,11 @@ public void abrir(){
     vista.setVisible(true); 
 }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
+      booksOfLottery lottery = new booksOfLottery();
+      lottery.setLocationRelativeTo(null);
+      lottery.setTitle("Menu_de_talonarios");
+      lottery.setVisible(true); 
+       dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     
