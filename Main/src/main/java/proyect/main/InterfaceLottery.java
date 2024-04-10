@@ -152,11 +152,11 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (checkingName()==true && checkingPrize()== true && checkingValues()==true && checkingDate()==true){
-            JOptionPane.showMessageDialog(null, "SE CREO");
+        if (checkingName()== false && checkingPrize()== false && checkingValues()== false && checkingDate()== false){
+            JOptionPane.showMessageDialog(null, "No se creo el talonario debido a errores...");
         }
         else{
-            JOptionPane.showMessageDialog(null, " NO SE CREO");
+            JOptionPane.showMessageDialog(null, " Se creo exitosamente");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
    
@@ -192,7 +192,13 @@ private boolean checkingValues(){
 private boolean checkingDate(){
     //Obtener la fecha actual
      Date fechaActual = new Date(); 
-     Date fechaSeleccionada =jDateChooser1.getDate();
+     Date fechaSeleccionada = jDateChooser1.getDate();
+     //String dateSelectted = this.jDateChooser1; terminar de validar y investigar
+//     if (dateSelectted.isEmpty()) {
+         
+      //  JOptionPane.showMessageDialog(null,"Debes agregar una fecha :");
+      //  return false;
+  // }
      if (fechaSeleccionada.before(fechaActual)) {
         JOptionPane.showMessageDialog(null,"Ingrese una fecha valida :");
         return false;
