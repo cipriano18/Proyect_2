@@ -152,46 +152,52 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        checkingPrize();
-        checkingName();
-        checkingValues();
-        fecha();
+        if (checkingName()==true && checkingPrize()== true && checkingValues()==true && checkingDate()==true){
+            JOptionPane.showMessageDialog(null, "SE CREO");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, " NO SE CREO");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+   
     private void textCantNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCantNumActionPerformed
 
     }//GEN-LAST:event_textCantNumActionPerformed
                  
- private void checkingName(){
+ private boolean checkingName(){
        String name=texName.getText();
        if (name.isEmpty()){
-           JOptionPane.showMessageDialog(null, "El nombre no puede ir vacio ");
+           return false;
        }
+       return true;
    }
 
- private void checkingPrize(){
+ private boolean checkingPrize(){
         String prize =  textPrize.getText();
         if(prize.isEmpty()){
-            JOptionPane.showMessageDialog(null, "El premio no puede ir vacio");
+            return false;
         }
+        return true;
 }
      
-private void checkingValues(){
+private boolean checkingValues(){
  int sizeNumber;
     try { 
   sizeNumber = Integer.parseInt(textCantNum.getText()); 
-  } catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(null, "No se permite caracteres especiales ni el campo vacio");
+  return true;
+  } catch (NumberFormatException e) {      
    }
+    return false;
 }
-private void fecha(){
+private boolean checkingDate(){
     //Obtener la fecha actual
      Date fechaActual = new Date(); 
      Date fechaSeleccionada =jDateChooser1.getDate();
      if (fechaSeleccionada.before(fechaActual)) {
-        JOptionPane.showMessageDialog(null,"Ingrese una fecha valida :( ");
+        JOptionPane.showMessageDialog(null,"Ingrese una fecha valida :");
+        return false;
     }
-     System.out.println("fecha"+jDateChooser1.getDate());
+    return true;
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
