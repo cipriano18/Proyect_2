@@ -1,5 +1,8 @@
 package proyect.main;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
@@ -148,11 +151,22 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (checkingName()== false && checkingPrize()== false && checkingValues()== false && checkingDate()== false){
-            JOptionPane.showMessageDialog(null, "No se creo el talonario debido a errores...");
+        if (checkingName()==true && checkingPrize()== true && checkingValues()==true && checkingDate()==true){
+            JOptionPane.showMessageDialog(null, "Creacion del talonario exitosa");
+            try (Connection conn = ConnectDatabase.getConnection()) {
+            try (CallableStatement agregarRifa = conn.prepareCall("{call Insertar_Rifa(?, ?, ?, ?)}")) {
+                agregarRifa.setString(1, texName.getText());
+                agregarRifa.setInt(2, Integer.parseInt(txtNumero.getText()));
+                agregarRifa.execute();
+                llenarMenuRifas();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         }
         else{
-            JOptionPane.showMessageDialog(null, " Se creo exitosamente");
+            JOptionPane.showMessageDialog(null, " NO SE CREO");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
    
