@@ -45,10 +45,10 @@
                       <Group type="102" attributes="0">
                           <Component id="choice1" min="-2" pref="65" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="jLayeredPane1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLayeredPane1" min="-2" pref="250" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="293" max="32767" attributes="0"/>
+                  <EmptySpace pref="43" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -58,8 +58,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="choice1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                  <Component id="jLayeredPane1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="184" max="32767" attributes="0"/>
+                  <Component id="jLayeredPane1" min="-2" pref="180" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -70,6 +70,11 @@
         <Component class="java.awt.Choice" name="choice1">
         </Component>
         <Container class="javax.swing.JLayeredPane" name="jLayeredPane1">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="ff" red="cc" type="rgb"/>
+            </Property>
+          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="10"/>
