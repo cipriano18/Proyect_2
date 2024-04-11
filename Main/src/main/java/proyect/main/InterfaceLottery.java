@@ -177,6 +177,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (checkingName() == true && checkingPrize() == true && checkingValues() == true && checkingDate() == true) {
             JOptionPane.showMessageDialog(null, "Creacion del talonario exitosa");
+<<<<<<< Updated upstream
             String NameLottery = texName.getText(), description = textDescription.getText(), price = textPrize.getText();
             int sizeLottery = Integer.parseInt(textCantNum.getText());
             Date dateLottery = jDateChooser1.getDate();
@@ -186,6 +187,11 @@ public class InterfaceLottery extends javax.swing.JFrame {
             v.abrir();
             dispose();
         } else {
+=======
+      
+        }
+        else{
+>>>>>>> Stashed changes
             JOptionPane.showMessageDialog(null, " NO SE CREO");
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -1,8 +1,8 @@
 package proyect.main;
 
-public class booksOfLottery extends javax.swing.JFrame {
+public class BooksOfLottery extends javax.swing.JFrame {
 
-    public booksOfLottery() {
+    public BooksOfLottery() {
         initComponents();
     }
 
