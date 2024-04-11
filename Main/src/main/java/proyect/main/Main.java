@@ -8,13 +8,12 @@ public class Main {
 
        Menu v=new Menu();
         v.abrir();
-/*try (Connection conn =  ConnectDatabase.getConnection()) {
+try (Connection conn =  ConnectDatabase.getConnection()) {
                     System.out.println("entre");
 
         } catch (SQLException e) {
             System.out.println("no entre pipipi");
             e.printStackTrace();
         }
-    }*/
     }
  }
