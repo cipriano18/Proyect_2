@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 public class InterfaceLottery extends javax.swing.JFrame {
-
+int id = 3;
     public InterfaceLottery() {
         initComponents();
     }
@@ -177,7 +177,6 @@ public class InterfaceLottery extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (checkingName() == true && checkingPrize() == true && checkingValues() == true && checkingDate() == true) {
             JOptionPane.showMessageDialog(null, "Creacion del talonario exitosa");
-<<<<<<< Updated upstream
             String NameLottery = texName.getText(), description = textDescription.getText(), price = textPrize.getText();
             int sizeLottery = Integer.parseInt(textCantNum.getText());
             Date dateLottery = jDateChooser1.getDate();
@@ -186,36 +185,34 @@ public class InterfaceLottery extends javax.swing.JFrame {
             Menu v = new Menu();
             v.abrir();
             dispose();
-        } else {
-=======
-      
         }
         else{
->>>>>>> Stashed changes
             JOptionPane.showMessageDialog(null, " NO SE CREO");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
+private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
 
-        try (Connection conn = ConnectDatabase.getConnection()) {
-            try {
-                var stmt = conn.prepareStatement("INSERT INTO talonario (nombre, cantidad_numero, descripcion, premio, fecha) VALUES (?, ?, ?, ?, ?)");
-                stmt.setString(1, name);
-                stmt.setInt(2, sizeLottery);
-                stmt.setString(3, description);
-                stmt.setString(4, prize);
-                stmt.setDate(5, new java.sql.Date(date.getTime()));
+    try (Connection conn = ConnectDatabase.getConnection()) {
+        try {
+            var stmt = conn.prepareStatement("INSERT INTO talonario (id, nombre, cantidad_numero, descripcion, premio, fecha) VALUES (? ,?, ?, ?, ?, ?)");
+            stmt.setInt(1, id);
+            stmt.setString(2, name);
+            stmt.setInt(3, sizeLottery);
+            stmt.setString(4, description);
+            stmt.setString(5, prize); // Corregido: establecer el premio en la posición correcta
+            stmt.setDate(6, new java.sql.Date(date.getTime())); // Corregido: establecer la fecha en la posición correcta
 
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            stmt.executeUpdate();
+            id++;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+}
 
     private void textCantNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCantNumActionPerformed
 
