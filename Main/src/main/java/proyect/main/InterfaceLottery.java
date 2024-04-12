@@ -1,13 +1,13 @@
 package proyect.main;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import proyect.main.ConnectDatabase;
 
 public class InterfaceLottery extends javax.swing.JFrame {
-int id = 3;
+
     public InterfaceLottery() {
         initComponents();
     }
@@ -191,29 +191,25 @@ int id = 3;
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
+ private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
+   try (Connection conn = ConnectDatabase.getConnection()) {
+            try {
+                var stmt = conn.prepareStatement("INSERT INTO talonario (nombre, cantidad_numero, descripcion, premio, fecha) VALUES (?, ?, ?, ?, ?)");
+                stmt.setString(1, name);
+                stmt.setInt(2, sizeLottery);
+                stmt.setString(3, description);
+                stmt.setString(4, prize);
+                stmt.setDate(5, new java.sql.Date(date.getTime()));
 
-    try (Connection conn = ConnectDatabase.getConnection()) {
-        try {
-            var stmt = conn.prepareStatement("INSERT INTO talonario (id, nombre, cantidad_numero, descripcion, premio, fecha) VALUES (? ,?, ?, ?, ?, ?)");
-            stmt.setInt(1, id);
-            stmt.setString(2, name);
-            stmt.setInt(3, sizeLottery);
-            stmt.setString(4, description);
-            stmt.setString(5, prize); // Corregido: establecer el premio en la posición correcta
-            stmt.setDate(6, new java.sql.Date(date.getTime())); // Corregido: establecer la fecha en la posición correcta
-
-            stmt.executeUpdate();
-            id++;
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+               e.printStackTrace();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+           e.printStackTrace();
+     }
 
-}
-
+ }
     private void textCantNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCantNumActionPerformed
 
     }//GEN-LAST:event_textCantNumActionPerformed
