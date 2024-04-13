@@ -92,7 +92,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
         });
         getContentPane().add(textPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 200, 30));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon("C:\\Users\\Marco\\Documents\\NetBeansProjects\\Proyecto\\Main\\src\\main\\java\\Images\\Menu_1.jpg")); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Desktop\\JAVA\\Proyecto\\Main\\src\\main\\java\\Images\\Menu_1.jpg")); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 420));
 
         pack();
