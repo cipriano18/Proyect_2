@@ -55,7 +55,7 @@ public class Menu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 153));
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Desktop\\JAVA\\Proyecto\\Main\\src\\main\\java\\Images\\icono_inicio1.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\PERSONAL\\Desktop\\Java-files\\Proyecto\\Main\\src\\main\\java\\Images\\icono_inicio1.jpg")); // NOI18N
 
         jLabel2.setBackground(new java.awt.Color(204, 255, 255));
         jLabel2.setFont(new java.awt.Font("Oswald", 0, 24)); // NOI18N

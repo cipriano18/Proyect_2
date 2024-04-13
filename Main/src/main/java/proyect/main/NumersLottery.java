@@ -50,11 +50,9 @@ public class NumersLottery extends javax.swing.JFrame {
     }
 
     private void cargarNumerosTalonarioDesdeDB(String nameLottery) {
-        try (Connection conn = ConnectDatabase.getConnection()) {
-            String sql = "SELECT cantidad_numero FROM talonario WHERE nombre = ?";
-
+        String sql = "SELECT cantidad_numero FROM talonario WHERE nombre = ?";
+        try (Connection conn = ConnectDatabase.getConnection()) {  
             PreparedStatement stmt = conn.prepareStatement(sql);
-
             stmt.setString(1, nameLottery);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

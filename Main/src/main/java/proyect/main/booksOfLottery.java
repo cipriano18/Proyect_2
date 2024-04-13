@@ -22,6 +22,7 @@ public class BooksOfLottery extends javax.swing.JFrame {
         Nombre = new javax.swing.JList<>();
         Cargar = new javax.swing.JButton();
         Eliminar = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,6 +58,13 @@ public class BooksOfLottery extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Ver Talonarios");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -67,7 +75,9 @@ public class BooksOfLottery extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
+                        .addGap(21, 21, 21)
+                        .addComponent(jButton2)
+                        .addGap(55, 55, 55)
                         .addComponent(jButton1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
@@ -88,7 +98,9 @@ public class BooksOfLottery extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
 
@@ -118,7 +130,15 @@ public class BooksOfLottery extends javax.swing.JFrame {
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
         eliminar();
+        cargarNombres();
     }//GEN-LAST:event_EliminarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       String nameSelected = Nombre.getSelectedValue();
+       NumersLottery lotterySelected = new NumersLottery(nameSelected);
+       lotterySelected.setVisible(true);
+       lotterySelected.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton2ActionPerformed
   private void cargarNombres() {
     ArrayList<String> nombres = Talonario.getNames();
  
@@ -149,6 +169,7 @@ String query="DELETE FROM TALONARIO WHERE NOMBRE = ? ";
     private javax.swing.JButton Eliminar;
     private javax.swing.JList<String> Nombre;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
