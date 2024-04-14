@@ -135,7 +135,7 @@ public class BooksOfLottery extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        String nameSelected = Nombre.getSelectedValue();
-       NumersLottery lotterySelected = new NumersLottery(nameSelected);
+       NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
        lotterySelected.setVisible(true);
        lotterySelected.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton2ActionPerformed

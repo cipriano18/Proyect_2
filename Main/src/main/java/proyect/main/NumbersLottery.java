@@ -19,12 +19,13 @@ import javax.swing.JPanel;
  *
  * @author PERSONAL
  */
-public class NumersLottery extends javax.swing.JFrame {
+public class NumbersLottery extends javax.swing.JFrame {
+
     private JPanel numerosPanel;
     private JButton reservarButton;
     private JButton pagarButton;
 
-    public NumersLottery(String nameLottery) {
+    public NumbersLottery(String nameLottery) {
         setTitle("Talonario de Rifas");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,21 +50,30 @@ public class NumersLottery extends javax.swing.JFrame {
         cargarNumerosTalonarioDesdeDB(nameLottery);
     }
 
-    private void cargarNumerosTalonarioDesdeDB(String nameLottery) {
+    private void cargarNumerosTalonarioDesdeDB(String nameLottery) { // " ' ' "
+        //nameLottery = "" + nameLottery + "'";
         String sql = "SELECT cantidad_numero FROM talonario WHERE nombre = ?";
-        try (Connection conn = ConnectDatabase.getConnection()) {  
+        String numero = new String();
+        try (Connection conn = ConnectDatabase.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, nameLottery);
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
-                String numero = rs.getString("numero");
-                JButton numeroButton = new JButton(numero);
+                numero = rs.getString("cantidad_numero");
                 //numeroButton.addActionListener(new NumeroButtonActionListener(numero));
-                numerosPanel.add(numeroButton);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        if (!numero.isEmpty()) {
+            for (int i = 0; i < Integer.parseInt(numero); i++) {
+                String numbers = String.valueOf(i + 1);
+                JButton numeroButton = new JButton(numbers);
+                //numeroButton.addActionListener(); terminar
+                numerosPanel.add(numeroButton);
+            }
         }
 
     }
