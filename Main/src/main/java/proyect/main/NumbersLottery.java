@@ -21,6 +21,7 @@ public class NumbersLottery extends javax.swing.JFrame {
     private JPanel numerosPanel;
     private JButton reservarButton;
     private JButton pagarButton;
+    private JButton botonSalida;
     private List<JButton> botonesGrises = new ArrayList<>();
 
     public NumbersLottery(String nameLottery) {
@@ -33,9 +34,20 @@ public class NumbersLottery extends javax.swing.JFrame {
 
         reservarButton = new JButton("Reservar");
         pagarButton = new JButton("Pagar");
+        botonSalida = new JButton("Menu");
+        
+        botonSalida.addActionListener(new ActionListener()  {
+                    public void actionPerformed(ActionEvent e) {
+                        Menu menu = new Menu();
+                        menu.abrir();
+                        dispose();
+                    }
+                });
+        
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(reservarButton);
         buttonPanel.add(pagarButton);
+        buttonPanel.add(botonSalida);
         buttonPanel.doLayout();
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -58,7 +70,6 @@ public class NumbersLottery extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-
         }
         if (!numero.isEmpty()) {
             for (int i = 0; i <= Integer.parseInt(numero); i++) {
@@ -66,7 +77,7 @@ public class NumbersLottery extends javax.swing.JFrame {
                 JButton numeroButton = new JButton(numbers);
                 numerosPanel.add(numeroButton);
                 
-                numeroButton.addActionListener(new ActionListener() {
+                numeroButton.addActionListener(new ActionListener()  {
                     public void actionPerformed(ActionEvent e) {
                         JButton botonPresionado = (JButton) e.getSource();
                         if (botonPresionado.getBackground() != Color.GRAY) {

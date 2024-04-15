@@ -1,15 +1,14 @@
-
 package proyect.main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
-
 
 public class BooksOfLottery extends javax.swing.JFrame {
 
@@ -145,7 +144,7 @@ public class BooksOfLottery extends javax.swing.JFrame {
         lotterySelected.setLocationRelativeTo(null);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-  
+
     private void cargarNombres() {
         ArrayList<String> nombres = Talonario.getNames();
 
@@ -172,18 +171,30 @@ public class BooksOfLottery extends javax.swing.JFrame {
     }
 
     public void reservarNumero(List<JButton> botonesGrises) {
-    // Cerrar la ventana actual
-    dispose();
-        for (int i = 0; i < botonesGrises.size(); i++) {
-            
+        // Cerrar la ventana actual
+        dispose();
+        String sql = "SELECT cantidad_numero FROM talonario WHERE nombre = ?";
+        String numero = new String();
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet result = stmt.executeQuery();
+
+            for (int i = 0; i < botonesGrises.size(); i++) {
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
-   public void openBookOfLottery(){
-       BooksOfLottery vista = new BooksOfLottery();
-       vista.setVisible(true);
-       vista.setLocationRelativeTo(null);
-       vista.setTitle("VISTA TALONARIO");
-   }   
+
+    public void openBookOfLottery() {
+        BooksOfLottery vista = new BooksOfLottery();
+        vista.setVisible(true);
+        vista.setLocationRelativeTo(null);
+        vista.setTitle("VISTA TALONARIO");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Eliminar;
