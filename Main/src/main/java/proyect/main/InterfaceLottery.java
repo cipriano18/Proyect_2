@@ -238,8 +238,8 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_textPrizeActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Menu v = new Menu();
-        v.abrir();
+        Menu menu = new Menu();
+        menu.abrir();
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -318,7 +318,6 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }
 
     private boolean checkingDate() {
-        //Obtener la fecha actual
         Date fechaActual = new Date();
         Date fechaSeleccionada = jDateChooser1.getDate();
         //String dateSelectted = this.jDateChooser1; terminar de validar y investigar

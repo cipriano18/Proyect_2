@@ -1,10 +1,15 @@
+
 package proyect.main;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JButton;
+
 
 public class BooksOfLottery extends javax.swing.JFrame {
 
@@ -119,13 +124,13 @@ public class BooksOfLottery extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Menu v=new Menu();
-        v.abrir(); 
+        Menu v = new Menu();
+        v.abrir();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void CargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarActionPerformed
-       cargarNombres();
+        cargarNombres();
     }//GEN-LAST:event_CargarActionPerformed
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
@@ -134,36 +139,43 @@ public class BooksOfLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       String nameSelected = Nombre.getSelectedValue();
-       NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
-       lotterySelected.setVisible(true);
-       lotterySelected.setLocationRelativeTo(null);
+        String nameSelected = Nombre.getSelectedValue();
+        NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
+        lotterySelected.setVisible(true);
+        lotterySelected.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton2ActionPerformed
-  private void cargarNombres() {
-    ArrayList<String> nombres = Talonario.getNames();
- 
-    DefaultListModel<String> model = new DefaultListModel<>();
-      for (int i = 0; i < nombres.size(); i++) {
-         String nombre = nombres.get(i); 
-        model.addElement(nombre);
-      }
-    Nombre.setModel(model);
-}
- private void eliminar() {
-  String nombreSeleccionado = Nombre.getSelectedValue();
-String query="DELETE FROM TALONARIO WHERE NOMBRE = ? ";
-        try(Connection conn = ConnectDatabase.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)){
-            stmt.setString(1,nombreSeleccionado);
-            int fila=stmt.executeUpdate();
-            if (fila>0) {
+  
+    private void cargarNombres() {
+        ArrayList<String> nombres = Talonario.getNames();
+
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (int i = 0; i < nombres.size(); i++) {
+            String nombre = nombres.get(i);
+            model.addElement(nombre);
+        }
+        Nombre.setModel(model);
+    }
+
+    private void eliminar() {
+        String nombreSeleccionado = Nombre.getSelectedValue();
+        String query = "DELETE FROM TALONARIO WHERE NOMBRE = ? ";
+        try (Connection conn = ConnectDatabase.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, nombreSeleccionado);
+            int fila = stmt.executeUpdate();
+            if (fila > 0) {
                 JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        }
     }
-}
+
+    public void reservarNumero(List<JButton> botonesGrises) {
+        for (int i = 0; i < botonesGrises.size(); i++) {
+            
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Eliminar;
