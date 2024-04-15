@@ -55,7 +55,7 @@ public class Menu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 153));
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\PERSONAL\\Desktop\\Java-files\\Proyecto\\Main\\src\\main\\java\\Images\\icono_inicio1.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Desktop\\JAVA\\Proyecto\\Main\\src\\main\\java\\Images\\icono_inicio1.jpg")); // NOI18N
 
         jLabel2.setBackground(new java.awt.Color(204, 255, 255));
         jLabel2.setFont(new java.awt.Font("Oswald", 0, 24)); // NOI18N
@@ -100,13 +100,11 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       BooksOfLottery vista = new BooksOfLottery();
-       vista.setVisible(true);
-       vista.setLocationRelativeTo(null);
-       vista.setTitle("VISTA TALONARIO");
-       dispose();
+       BooksOfLottery booksOfLottery = new BooksOfLottery();
+        booksOfLottery.openBookOfLottery();
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
-                                   
+                             
 public void abrir(){
     Menu vista=new Menu();
     vista.setLocationRelativeTo(null);

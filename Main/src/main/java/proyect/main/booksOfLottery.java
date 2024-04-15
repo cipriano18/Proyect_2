@@ -143,6 +143,7 @@ public class BooksOfLottery extends javax.swing.JFrame {
         NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
         lotterySelected.setVisible(true);
         lotterySelected.setLocationRelativeTo(null);
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
   
     private void cargarNombres() {
@@ -171,11 +172,18 @@ public class BooksOfLottery extends javax.swing.JFrame {
     }
 
     public void reservarNumero(List<JButton> botonesGrises) {
+    // Cerrar la ventana actual
+    dispose();
         for (int i = 0; i < botonesGrises.size(); i++) {
             
         }
     }
-
+   public void openBookOfLottery(){
+       BooksOfLottery vista = new BooksOfLottery();
+       vista.setVisible(true);
+       vista.setLocationRelativeTo(null);
+       vista.setTitle("VISTA TALONARIO");
+   }   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Eliminar;

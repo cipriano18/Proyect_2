@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package proyect.main;
 
 import java.awt.BorderLayout;
@@ -20,10 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- *
- * @author PERSONAL
- */
 public class NumbersLottery extends javax.swing.JFrame {
 
     private JPanel numerosPanel;
@@ -48,6 +40,7 @@ public class NumbersLottery extends javax.swing.JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         cargarNumerosTalonarioDesdeDB(nameLottery);
+
     }
 
     private void cargarNumerosTalonarioDesdeDB(String nameLottery) {
@@ -106,11 +99,11 @@ public class NumbersLottery extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 343, Short.MAX_VALUE)
         );
 
         pack();
