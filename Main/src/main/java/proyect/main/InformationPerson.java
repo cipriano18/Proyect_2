@@ -89,19 +89,22 @@ public class InformationPerson extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         String nameParticipant = NameParticipant.getText();
+        String nameParticipant = NameParticipant.getText();
         try (Connection conn = ConnectDatabase.getConnection()) {
             try {
                 var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
                 stmt.setString(1, nameParticipant);
 
                 stmt.executeUpdate();
+                NumbersLottery MARCOPDPKFNSPFMKLSNF = new NumbersLottery();// lo misma mierda
+                MARCOPDPKFNSPFMKLSNF.reservarNumeros(nameParticipant);
             } catch (SQLException e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
-import proyect.main.ConnectDatabase;
 
 public class InterfaceLottery extends javax.swing.JFrame {
 

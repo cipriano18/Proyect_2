@@ -17,6 +17,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class NumbersLottery extends javax.swing.JFrame {
+    
+    public NumbersLottery(){
+         initComponents();
+    }
 
     private JPanel numerosPanel;
     private JButton reservarButton;
@@ -26,7 +30,7 @@ public class NumbersLottery extends javax.swing.JFrame {
 
     public NumbersLottery(String nameLottery) {
         setTitle("Talonario de Rifas");
-        setSize(400, 300);
+        setSize(560, 410);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         numerosPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -78,6 +82,7 @@ public class NumbersLottery extends javax.swing.JFrame {
                 numerosPanel.add(numeroButton);
                 
                 numeroButton.addActionListener(new ActionListener()  {
+                    
                     public void actionPerformed(ActionEvent e) {
                         JButton botonPresionado = (JButton) e.getSource();
                         if (botonPresionado.getBackground() != Color.GRAY) {
@@ -91,13 +96,20 @@ public class NumbersLottery extends javax.swing.JFrame {
                     }
                 });
             }
+            reservarButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        InformationPerson xd = new InformationPerson(); // cambiar xd NO OLVIDARSE
+                        xd.setVisible(true);
+                        dispose();
+
+                    }
+                });
         }
     }
     
-        private void reservarNumeros() {
+        public void reservarNumeros(String nameParticipant) {
         BooksOfLottery newBook = new BooksOfLottery();
-        // Enviamos la lista de botones grises a la función reservarNumero
-        newBook.reservarNumero(botonesGrises);
+        newBook.reservarNumero(botonesGrises, nameParticipant);
     }
 
     @SuppressWarnings("unchecked")
