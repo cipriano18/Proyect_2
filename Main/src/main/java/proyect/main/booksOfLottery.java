@@ -143,6 +143,7 @@ public class BooksOfLottery extends javax.swing.JFrame {
         NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
         lotterySelected.setVisible(true);
         lotterySelected.setLocationRelativeTo(null);
+        TalonarioSelected.setTalonarioSelected(nameSelected);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -170,28 +171,6 @@ public class BooksOfLottery extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-
-    public void reservarNumero(List<JButton> botonesGrises, String nameParticipant) {
-        dispose();
-
-        String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
-        String opcionSelected = Nombre.getSelectedValue();
-        try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
-            for (int i = 0; i < botonesGrises.size(); i++) {
-                int numberSelected = Integer.parseInt(botonesGrises.get(i).getText());
-                stmt.setInt(1, numberSelected); // Pasa el número del talonario
-                stmt.setString(2, "R"); // Pasa el estado
-                stmt.setString(3, nameParticipant); // Pasa el nombre del participante
-                stmt.setString(4, opcionSelected); // Pasa el nombre del talonario (esto se tiene que conseguir del panel el nombre del talonario)
-                stmt.execute(); // Ejecuta el procedimiento almacenado
-            }
-             JOptionPane.showMessageDialog(null, "Numeros reservados con exito");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     public void openBookOfLottery() {
         BooksOfLottery vista = new BooksOfLottery();
         vista.setVisible(true);

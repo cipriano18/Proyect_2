@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class NumbersLottery extends javax.swing.JFrame {
-    
-    public NumbersLottery(){
-         initComponents();
+
+    public NumbersLottery() {
+        initComponents();
     }
 
     private JPanel numerosPanel;
@@ -39,15 +40,15 @@ public class NumbersLottery extends javax.swing.JFrame {
         reservarButton = new JButton("Reservar");
         pagarButton = new JButton("Pagar");
         botonSalida = new JButton("Menu");
-        
-        botonSalida.addActionListener(new ActionListener()  {
-                    public void actionPerformed(ActionEvent e) {
-                        Menu menu = new Menu();
-                        menu.abrir();
-                        dispose();
-                    }
-                });
-        
+
+        botonSalida.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Menu menu = new Menu();
+                menu.abrir();
+                dispose();
+            }
+        });
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(reservarButton);
         buttonPanel.add(pagarButton);
@@ -80,36 +81,62 @@ public class NumbersLottery extends javax.swing.JFrame {
                 String numbers = String.valueOf(i);
                 JButton numeroButton = new JButton(numbers);
                 numerosPanel.add(numeroButton);
-                
-                numeroButton.addActionListener(new ActionListener()  {
-                    
+
+                numeroButton.addActionListener(new ActionListener() {
+
                     public void actionPerformed(ActionEvent e) {
                         JButton botonPresionado = (JButton) e.getSource();
                         if (botonPresionado.getBackground() != Color.GRAY) {
                             botonPresionado.setBackground(Color.GRAY);
                             botonesGrises.add(botonPresionado);
+                            System.out.println(botonesGrises.size());
                         } else {
                             botonPresionado.setBackground(null);
                             botonesGrises.remove(botonPresionado);
                         }
-                        
+
                     }
                 });
             }
             reservarButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        InformationPerson xd = new InformationPerson(); // cambiar xd NO OLVIDARSE
-                        xd.setVisible(true);
-                        dispose();
-
+                public void actionPerformed(ActionEvent e) {
+                    String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
+                    try (Connection conn = ConnectDatabase.getConnection()) {
+                        var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
+                        stmt.setString(1, nameParticipant);
+                        stmt.executeUpdate();
+                        reservarNumero(nameParticipant);
+                    } catch (SQLException es) {
+                        es.printStackTrace();
                     }
-                });
+
+                }
+            });
         }
     }
-    
-        public void reservarNumeros(String nameParticipant) {
-        BooksOfLottery newBook = new BooksOfLottery();
-        newBook.reservarNumero(botonesGrises, nameParticipant);
+
+    public void reservarNumero(String nameParticipant) {
+        String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
+        String opcionSelected = TalonarioSelected.getTalonarioSelected();
+        System.out.println(TalonarioSelected.getTalonarioSelected());
+        try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
+            System.out.println(botonesGrises.size());
+            for (int i = 0; i < botonesGrises.size(); i++) {
+                int numberSelected = Integer.parseInt(botonesGrises.get(i).getText());
+                stmt.setInt(1, numberSelected); // Pasa el número del talonario
+                stmt.setString(2, "R"); // Pasa el estado
+                stmt.setString(3, nameParticipant); // Pasa el nombre del participante
+                stmt.setString(4, opcionSelected); // Pasa el nombre del talonario (esto se tiene que conseguir del panel el nombre del talonario)
+                stmt.execute(); // Ejecuta el procedimiento almacenado
+            }
+            JOptionPane.showMessageDialog(null, "Numeros reservados con exito");
+            BooksOfLottery vista = new BooksOfLottery();
+            vista.openBookOfLottery();
+            dispose();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @SuppressWarnings("unchecked")
