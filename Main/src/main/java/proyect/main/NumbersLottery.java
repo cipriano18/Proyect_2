@@ -94,7 +94,11 @@ public class NumbersLottery extends javax.swing.JFrame {
                 String estadoNumero = resultEstado.getString("estado");
                 if (estadoNumero.equals("R")) {
                     numeroButton.setBackground(Color.RED); // Ejemplo de estado reservado
-                } else {
+                } 
+                else if (estadoNumero.equals("P")) {
+                     numeroButton.setBackground(Color.yellow); 
+                }
+                else {
                     numeroButton.setBackground(Color.GREEN); // Ejemplo de estado disponible
                 }
             } else {
@@ -119,6 +123,7 @@ public class NumbersLottery extends javax.swing.JFrame {
             }
         });
     }
+
 reservarButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
@@ -134,7 +139,21 @@ reservarButton.addActionListener(new ActionListener() {
                 }
             });
         }
-    }
+      pagarButton.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+           String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
+                    try (Connection conn = ConnectDatabase.getConnection()) {
+                        var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
+                        stmt.setString(1, nameParticipant);
+                        stmt.executeUpdate();
+                        pagado(nameParticipant);
+                    } catch (SQLException es) {
+                        es.printStackTrace();
+                 }
+         }
+        });
+   }
+    
 
     public void reservarNumero(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
@@ -151,6 +170,28 @@ reservarButton.addActionListener(new ActionListener() {
                 stmt.execute(); // Ejecuta el procedimiento almacenado
             }
             JOptionPane.showMessageDialog(null, "Numeros reservados con exito");
+            BooksOfLottery vista = new BooksOfLottery();
+            vista.openBookOfLottery();
+            dispose();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void pagado (String nameParticipant){
+        String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
+        String opcionSelected = TalonarioSelected.getTalonarioSelected();
+        System.out.println(TalonarioSelected.getTalonarioSelected());
+        try(Connection conn= ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)){
+            for (int i = 0; i < botonesGrises.size(); i++) {
+                int numerSelect=Integer.parseInt(botonesGrises.get(i).getText());
+                stmt.setInt(1, numerSelect);
+                stmt.setString(2,"P");
+                stmt.setString(3, nameParticipant); // Pasa el nombre del participante
+                stmt.setString(4, opcionSelected); // Pasa el nombre del talonario (esto se tiene que conseguir del panel el nombre del talonario)
+                stmt.execute();
+            }
+             JOptionPane.showMessageDialog(null, "Numeros pagados con exito");
             BooksOfLottery vista = new BooksOfLottery();
             vista.openBookOfLottery();
             dispose();
