@@ -57,7 +57,7 @@ public class NumbersLottery extends javax.swing.JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         cargarNumerosTalonarioDesdeDB(nameLottery);
-
+         
     }
 
     private void cargarNumerosTalonarioDesdeDB(String nameLottery) {
@@ -76,29 +76,50 @@ public class NumbersLottery extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        if (!numero.isEmpty()) {
-            for (int i = 0; i <= Integer.parseInt(numero); i++) {
-                String numbers = String.valueOf(i);
-                JButton numeroButton = new JButton(numbers);
-                numerosPanel.add(numeroButton);
+      if (!numero.isEmpty()) {
+    int cantidadNumeros = Integer.parseInt(numero);
+    for (int i = 0; i <= cantidadNumeros; i++) {
+        String numbers = String.valueOf(i);
+        JButton numeroButton = new JButton(numbers);
+        numerosPanel.add(numeroButton);
 
-                numeroButton.addActionListener(new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-                        JButton botonPresionado = (JButton) e.getSource();
-                        if (botonPresionado.getBackground() != Color.GRAY) {
-                            botonPresionado.setBackground(Color.GRAY);
-                            botonesGrises.add(botonPresionado);
-                            System.out.println(botonesGrises.size());
-                        } else {
-                            botonPresionado.setBackground(null);
-                            botonesGrises.remove(botonPresionado);
-                        }
-
-                    }
-                });
+        // Aquí verificamos el estado del número
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
+            PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
+            stmtEstado.setString(1, numbers);
+            ResultSet resultEstado = stmtEstado.executeQuery();
+            
+            if (resultEstado.next()) {
+                String estadoNumero = resultEstado.getString("estado");
+                if (estadoNumero.equals("R")) {
+                    numeroButton.setBackground(Color.RED); // Ejemplo de estado reservado
+                } else {
+                    numeroButton.setBackground(Color.GREEN); // Ejemplo de estado disponible
+                }
+            } else {
+                numeroButton.setBackground(Color.WHITE); // Ejemplo de estado no encontrado
             }
-            reservarButton.addActionListener(new ActionListener() {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        numeroButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JButton botonPresionado = (JButton) e.getSource();
+                if (botonPresionado.getBackground() != Color.GRAY) {
+                    botonPresionado.setBackground(Color.GRAY);
+                    botonesGrises.add(botonPresionado);
+                    System.out.println(botonesGrises.size());
+                } else {
+                    botonPresionado.setBackground(null);
+                    botonesGrises.remove(botonPresionado);
+                }
+            }
+        });
+    }
+reservarButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
                     try (Connection conn = ConnectDatabase.getConnection()) {
