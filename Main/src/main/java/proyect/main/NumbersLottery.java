@@ -92,14 +92,14 @@ public class NumbersLottery extends javax.swing.JFrame {
             
             if (resultEstado.next()) {
                 String estadoNumero = resultEstado.getString("estado");
-                if (estadoNumero.equals("R")) {
-                    numeroButton.setBackground(Color.RED); // Ejemplo de estado reservado
+                if (estadoNumero.equals("R")) {            //estadoNumero == 'R'
+                    numeroButton.setBackground(Color.RED); // estado reservado
                 } 
-                else if (estadoNumero.equals("P")) {
-                     numeroButton.setBackground(Color.yellow); 
+                else if (estadoNumero.equals("P")) {          
+                     numeroButton.setBackground(Color.yellow); // estado pagado
                 }
                 else {
-                    numeroButton.setBackground(Color.GREEN); // Ejemplo de estado disponible
+                    numeroButton.setBackground(Color.GREEN); // estado disponible
                 }
             } else {
                 numeroButton.setBackground(Color.WHITE); // Ejemplo de estado no encontrado
@@ -200,7 +200,17 @@ reservarButton.addActionListener(new ActionListener() {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
+    /*c void rifarNumeros (){    ESTO ES EXTRAAAAAAAAAAAAAAAA!
+        
+        int sizeNums = botonesGrises.size();
+         int numWin = (int)(Math.random()*sizeNums+1);
+        System.out.println(numWin);
+        
+         JOptionPane.showMessageDialog(null, "EL GANADOR ES " + numWin);
+    }
+    */
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
