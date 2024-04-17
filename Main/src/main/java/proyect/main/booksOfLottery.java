@@ -57,7 +57,6 @@ public class BooksOfLottery extends javax.swing.JFrame {
         Cargar.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
         Cargar.setForeground(new java.awt.Color(255, 255, 255));
         Cargar.setText("CARGAR TALONARIOS");
-        Cargar.setActionCommand("CARGAR TALONARIOS");
         Cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CargarActionPerformed(evt);
@@ -74,7 +73,11 @@ public class BooksOfLottery extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setBackground(new java.awt.Color(51, 102, 0));
+
         Nombre.setBackground(new java.awt.Color(204, 204, 204));
+        Nombre.setFont(new java.awt.Font("Oswald", 0, 18)); // NOI18N
+        Nombre.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(Nombre);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -182,6 +185,8 @@ public class BooksOfLottery extends javax.swing.JFrame {
         vista.setLocationRelativeTo(null);
         vista.setTitle("VISTA TALONARIO");
     }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cargar;
     private javax.swing.JButton Eliminar;

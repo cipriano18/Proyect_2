@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -18,7 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class NumbersLottery extends javax.swing.JFrame {
-
+    
+    public static int sizeGlobal;
+    
     public NumbersLottery() {
         initComponents();
     }
@@ -27,6 +30,7 @@ public class NumbersLottery extends javax.swing.JFrame {
     private JButton reservarButton;
     private JButton pagarButton;
     private JButton botonSalida;
+    private JButton botonRifa;
     private List<JButton> botonesGrises = new ArrayList<>();
 
     public NumbersLottery(String nameLottery) {
@@ -35,29 +39,38 @@ public class NumbersLottery extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         numerosPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        numerosPanel.setBackground(Color.lightGray);
         add(numerosPanel, BorderLayout.CENTER);
- 
+
         reservarButton = new JButton("Reservar");
         pagarButton = new JButton("Pagar");
-        botonSalida = new JButton("Menu");
-
+        botonSalida = new JButton("Regresar");
+        botonRifa = new JButton("Rifar");
+        reservarButton.setBackground(Color.BLACK);
+        reservarButton.setForeground(Color.WHITE);
+        pagarButton.setBackground(Color.BLACK);
+        pagarButton.setForeground(Color.WHITE);
+        botonSalida.setBackground(Color.BLACK);
+        botonSalida.setForeground(Color.WHITE);
+        botonRifa.setBackground(Color.BLACK);
+        botonRifa.setForeground(Color.WHITE);
         botonSalida.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Menu menu = new Menu();
-                menu.abrir();
+                BooksOfLottery booksOfLottery = new BooksOfLottery();
+                booksOfLottery.openBookOfLottery();
                 dispose();
             }
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        buttonPanel.add(botonSalida);
         buttonPanel.add(reservarButton);
         buttonPanel.add(pagarButton);
-        buttonPanel.add(botonSalida);
+        buttonPanel.add(botonRifa);
         buttonPanel.doLayout();
         add(buttonPanel, BorderLayout.SOUTH);
-
         cargarNumerosTalonarioDesdeDB(nameLottery);
-         
     }
 
     private void cargarNumerosTalonarioDesdeDB(String nameLottery) {
@@ -70,69 +83,66 @@ public class NumbersLottery extends javax.swing.JFrame {
 
             while (result.next()) {
                 numero = result.getString("cantidad_numero");
-                //numeroButton.addActionListener(new NumeroButtonActionListener(numero));
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-      if (!numero.isEmpty()) {
-    int cantidadNumeros = Integer.parseInt(numero);
-    for (int i = 0; i <= cantidadNumeros; i++) {
-        String numbers = String.valueOf(i);
-        JButton numeroButton = new JButton(numbers);
-        numerosPanel.add(numeroButton);
-        numeroButton.setBackground(Color.GREEN);
-        // Aquí verificamos el estado del número
-        try (Connection conn = ConnectDatabase.getConnection()) {
-            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
-            PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
-            stmtEstado.setString(1, numbers);
-            ResultSet resultEstado = stmtEstado.executeQuery();
-         
-            if (resultEstado.next()) {
-                String estadoNumero = resultEstado.getString("estado");
-                if (estadoNumero.equals("R")) {            //estadoNumero == 'R'
-                    numeroButton.setBackground(Color.yellow); // estado reservado
-                } 
-                else if (estadoNumero.equals("P")) {          
-                     numeroButton.setBackground(Color.RED); // estado pagado
-                }
-                else {
-                    numeroButton.setBackground(Color.GRAY); // estado disponible
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        if (!numero.isEmpty()) {
+            int cantidadNumeros = Integer.parseInt(numero);
+            sizeGlobal = cantidadNumeros;
+            for (int i = 0; i <= cantidadNumeros; i++) {
+                String numbers = String.valueOf(i);
+                JButton numeroButton = new JButton(numbers);
+                numerosPanel.add(numeroButton);
+                numeroButton.setBackground(Color.GREEN);
+                // Aquí verificamos el estado del número
+                try (Connection conn = ConnectDatabase.getConnection()) {
+                    String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
+                    PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
+                    stmtEstado.setString(1, numbers);
+                    ResultSet resultEstado = stmtEstado.executeQuery();
 
-        numeroButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JButton botonPresionado = (JButton) e.getSource();
-                 if (botonPresionado.getBackground().equals(Color.yellow)) {
-                    int option = JOptionPane.showConfirmDialog(null,"Deseas pagar los numeros");
-                     if (option==JOptionPane.YES_OPTION) {
-                          JOptionPane.showMessageDialog(null, "NUMEROS PAGADOS"); 
-                         int numeroSeleccionado = Integer.parseInt(botonPresionado.getText());
-                        cambiarEstado(numeroSeleccionado);  
-                     }
-                     else{
-           JOptionPane.showMessageDialog(null, "NO CANCELASTE MALA PAGA"); 
-                     }
-                 }
-                 else if (botonPresionado.getBackground().equals(Color.RED)) {
-         JOptionPane.showMessageDialog(null, "ESTE NUMERO ESTA PAGADO");          
-                 } else {
-                     botonPresionado.setBackground(Color.GRAY);
-                    botonesGrises.add(botonPresionado);
-                    System.out.println(botonesGrises.size());
+                    if (resultEstado.next()) {
+                        String estadoNumero = resultEstado.getString("estado");
+                        if (estadoNumero.equals("R")) {            //estadoNumero == 'R'
+                            numeroButton.setBackground(Color.yellow); // estado reservado
+                        } else if (estadoNumero.equals("P")) {
+                            numeroButton.setBackground(Color.RED); // estado pagado
+                        } else {
+                            numeroButton.setBackground(Color.GRAY); // estado disponible
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            }
-        });
-    }
 
-reservarButton.addActionListener(new ActionListener() {
+                numeroButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        JButton botonPresionado = (JButton) e.getSource();
+                        if (botonPresionado.getBackground().equals(Color.yellow)) {
+                            int option = JOptionPane.showConfirmDialog(null, "Deseas pagar los numeros");
+                            if (option == JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "NUMEROS PAGADOS");
+                                int numeroSeleccionado = Integer.parseInt(botonPresionado.getText());
+                                cambiarEstado(numeroSeleccionado);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "NO CANCELASTE MALA PAGA");
+                            }
+                        } else if (botonPresionado.getBackground().equals(Color.RED)) {
+                            JOptionPane.showMessageDialog(null, "ESTE NUMERO ESTA PAGADO");
+                        } else {
+                            botonPresionado.setBackground(Color.GRAY);
+                            botonesGrises.add(botonPresionado);
+                            System.out.println(botonesGrises.size());
+                        }
+                    }
+                });
+            }
+
+            reservarButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
                     try (Connection conn = ConnectDatabase.getConnection()) {
@@ -147,21 +157,26 @@ reservarButton.addActionListener(new ActionListener() {
                 }
             });
         }
-      pagarButton.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-           String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
-                    try (Connection conn = ConnectDatabase.getConnection()) {
-                        var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
-                        stmt.setString(1, nameParticipant);
-                        stmt.executeUpdate();
-                        pagado(nameParticipant);
-                    } catch (SQLException es) {
-                        es.printStackTrace();
-                 }
-         }
+        pagarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
+                try (Connection conn = ConnectDatabase.getConnection()) {
+                    var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
+                    stmt.setString(1, nameParticipant);
+                    stmt.executeUpdate();
+                    pagado(nameParticipant);
+                } catch (SQLException es) {
+                    es.printStackTrace();
+                }
+            }
         });
-   }
-    
+
+        botonRifa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rifarNumeros();
+            }
+        });
+    }
 
     public void reservarNumero(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
@@ -186,20 +201,21 @@ reservarButton.addActionListener(new ActionListener() {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void pagado (String nameParticipant){
+
+    public void pagado(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
         String opcionSelected = TalonarioSelected.getTalonarioSelected();
         System.out.println(TalonarioSelected.getTalonarioSelected());
-        try(Connection conn= ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)){
+        try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
             for (int i = 0; i < botonesGrises.size(); i++) {
-                int numerSelect=Integer.parseInt(botonesGrises.get(i).getText());
+                int numerSelect = Integer.parseInt(botonesGrises.get(i).getText());
                 stmt.setInt(1, numerSelect);
-                stmt.setString(2,"P");
+                stmt.setString(2, "P");
                 stmt.setString(3, nameParticipant); // Pasa el nombre del participante
                 stmt.setString(4, opcionSelected); // Pasa el nombre del talonario (esto se tiene que conseguir del panel el nombre del talonario)
                 stmt.execute();
             }
-             JOptionPane.showMessageDialog(null, "Numeros pagados con exito");
+            JOptionPane.showMessageDialog(null, "Numeros pagados con exito");
             BooksOfLottery vista = new BooksOfLottery();
             vista.openBookOfLottery();
             dispose();
@@ -208,121 +224,93 @@ reservarButton.addActionListener(new ActionListener() {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
- public void cambiarEstado(int numeroSeleccionado) {
-    String sql = "{CALL cambiar_estado_numero(?, ?)}"; // Llamar al procedimiento almacenado
-    
-    try (Connection conn = ConnectDatabase.getConnection(); 
-         CallableStatement stmt = conn.prepareCall(sql)) {
-        
-        stmt.setInt(1, numeroSeleccionado); // Primer parámetro del procedimiento almacenado
-        stmt.setString(2, "P"); // Segundo parámetro del procedimiento almacenado
-        
-        stmt.execute(); // Ejecutar el procedimiento almacenado
-        
-        JOptionPane.showMessageDialog(null, "Número " + numeroSeleccionado + " pagado con éxito");
-        BooksOfLottery vista = new BooksOfLottery();
-        vista.openBookOfLottery();
-        dispose();
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+
+    public void cambiarEstado(int numeroSeleccionado) {
+        String sql = "{CALL cambiar_estado_numero(?, ?)}"; // Llamar al procedimiento almacenado
+
+        try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, numeroSeleccionado); // Primer parámetro del procedimiento almacenado
+            stmt.setString(2, "P"); // Segundo parámetro del procedimiento almacenado
+
+            stmt.execute(); // Ejecutar el procedimiento almacenado
+
+            JOptionPane.showMessageDialog(null, "Número " + numeroSeleccionado + " pagado con éxito");
+            BooksOfLottery vista = new BooksOfLottery();
+            vista.openBookOfLottery();
+            dispose();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
-    /*c void rifarNumeros (){    ESTO ES EXTRAAAAAAAAAAAAAAAA!
-        
-        int sizeNums = botonesGrises.size();
-         int numWin = (int)(Math.random()*sizeNums+1);
-        System.out.println(numWin);
-        
-         JOptionPane.showMessageDialog(null, "EL GANADOR ES " + numWin);
+
+    public void rifarNumeros() {
+
+        int sizeNums = sizeGlobal + 1;
+        int numWin = (int) (Math.random() * sizeNums + 1);
+        System.out.println(sizeNums);
+
+        String numWinnnn = String.valueOf(numWin);
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
+            PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
+            stmtEstado.setString(1, numWinnnn);
+            ResultSet winningResultState = stmtEstado.executeQuery();
+
+            if (winningResultState.equals('P')) {
+                try (Connection connn = ConnectDatabase.getConnection()) {
+                    String sqlNombre = "{ ? = call SeleccionarNombre(?) }";
+                    CallableStatement matt = connn.prepareCall(sqlNombre);
+                    matt.registerOutParameter(1, Types.VARCHAR); // Tipo de retorno de la función
+                    matt.setInt(2, 123); // Valor del parámetro p_numero
+
+                    // Ejecutar la llamada a la función
+                    matt.execute();
+
+                    // Obtener el resultado
+                    String nombre = matt.getString(1);
+                    System.out.println("Nombre del participante: " + nombre);
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (winningResultState.equals("R")) {
+                System.out.println("Nombre del participanteeeeeeee: ");
+            } else {
+                System.out.println("SOLO AQUI ENTRAAAAA: ");
+                System.out.println(numWinnnn);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    */
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        J1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 51, 51));
-
-        J1.setBackground(new java.awt.Color(0, 0, 0));
-        J1.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
-        J1.setForeground(new java.awt.Color(255, 255, 255));
-        J1.setText("MENU");
-        J1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                J1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setBackground(new java.awt.Color(0, 0, 0));
-        jButton2.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("RESERVAR");
-        jButton2.setActionCommand("RESERVAR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setBackground(new java.awt.Color(0, 0, 0));
-        jButton3.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("COMPRAR");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(J1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addContainerGap(78, Short.MAX_VALUE))
+            .addGap(0, 450, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(259, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(J1)
-                    .addComponent(jButton3))
-                .addGap(44, 44, 44))
+            .addGap(0, 335, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void J1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_J1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_J1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton J1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     // End of variables declaration//GEN-END:variables
 }

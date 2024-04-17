@@ -7,14 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Talonario {
-    private String name;
-
-    public String getName() {
+    private static String name;
+ 
+    public static String getName() {
         return name;
     }
-    public void setName(String name) {
+    public void  setName(String name) {
         this.name = name;
     }
+    
    public static ArrayList<String> getNames() {
         ArrayList<String> names = new ArrayList<>();
         String query = "SELECT nombre FROM talonario";
