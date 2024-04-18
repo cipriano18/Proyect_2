@@ -182,8 +182,8 @@ public class NumbersLottery extends javax.swing.JFrame {
 
     public void reservarNumero(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
-        String opcionSelected = TalonarioSelected.getTalonarioSelected();
-        System.out.println(TalonarioSelected.getTalonarioSelected());
+        String opcionSelected = TalonarySelected.getTalonarioSelected();
+        System.out.println(TalonarySelected.getTalonarioSelected());
         try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
             System.out.println(botonesGrises.size());
             for (int i = 0; i < botonesGrises.size(); i++) {
@@ -206,8 +206,8 @@ public class NumbersLottery extends javax.swing.JFrame {
 
     public void pagado(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
-        String opcionSelected = TalonarioSelected.getTalonarioSelected();
-        System.out.println(TalonarioSelected.getTalonarioSelected());
+        String opcionSelected = TalonarySelected.getTalonarioSelected();
+        System.out.println(TalonarySelected.getTalonarioSelected());
         try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
             for (int i = 0; i < botonesGrises.size(); i++) {
                 int numerSelect = Integer.parseInt(botonesGrises.get(i).getText());
@@ -247,15 +247,13 @@ public class NumbersLottery extends javax.swing.JFrame {
         }
     }
 
-public void rifarNumeros() {
-    int sizeNums = sizeGlobal;
+    /*    int sizeNums = sizeGlobal;
     int numWin = (int) (Math.random() * sizeNums + 1);
+     String lotterySelected = TalonarySelected.getTalonarioSelected();
     
     try (Connection conn = ConnectDatabase.getConnection();
          PreparedStatement stmtEstado = conn.prepareStatement("SELECT estado FROM numero_talonario WHERE numero = ?");
          CallableStatement matt = conn.prepareCall("{ ? = call SeleccionarNombre(?, ?) }")) {
-        
-        String lotterySelected = TalonarioSelected.getTalonarioSelected();
         
         stmtEstado.setInt(1, numWin); // Corregido el índice del parámetro
         try (ResultSet winningResultState = stmtEstado.executeQuery()) {
@@ -280,8 +278,38 @@ public void rifarNumeros() {
     } catch (SQLException e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+    }*/
+    public void rifarNumeros() {
+        int sizeNums = sizeGlobal;
+        int numWin = (int) (Math.random() * sizeNums + 1);
+        String lotterySelected = TalonarySelected.getTalonarioSelected();
+        String estadoTalonario = obtenerEstadoTalonarioI(numWin, lotterySelected);
+
+        if (estadoTalonario.equals("P")) {
+            try (Connection conn = ConnectDatabase.getConnection()) {
+                PreparedStatement stmt1 = conn.prepareCall("SELECT nombre_participante FROM participante WHERE id = ( SELECT person_id FROM numero_talonario WHERE numero = ? AND rifa_id = ( SELECT id FROM talonario WHERE nombre = ? ) )");
+                stmt1.setInt(1, numWin);
+                stmt1.setString(2, lotterySelected);
+                System.out.println(numWin);
+                System.out.println(lotterySelected);
+                stmt1.execute();
+                ResultSet nameWinner = stmt1.executeQuery();
+                if (nameWinner.next()) {
+                    String name = nameWinner.getString("nombre_participante");
+                    JOptionPane.showMessageDialog(null, "El numero ganador es:  " + numWin + "\nNombre del ganador: " + name + "\nFELICIDADES!!!");
+                }
+            } catch (SQLException e) {
+                e.getErrorCode();
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (estadoTalonario.equals("R")) {
+            JOptionPane.showMessageDialog(null, "El numero ganador es:  " + numWin + "\nEl numero solo fue reservado\nAsí que no existe un participante ganador");
+        } else if (estadoTalonario.equals("default")) {
+            JOptionPane.showMessageDialog(null, "El numero ganador es:  " + numWin + "\nEl numero no fue comprado ni reservado\nAsí que no existe participante ganador");
+        }
     }
-}
+
     public int obtenerIdTalonario(String nameLottery) {
         int idTalonario = 0;
         try (Connection conn = ConnectDatabase.getConnection()) {
@@ -319,6 +347,23 @@ public void rifarNumeros() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private String obtenerEstadoTalonarioI(int numWin, String lotterySelected) {
+        String stateWinning = "default";
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            PreparedStatement stmtEstado = conn.prepareStatement("SELECT estado FROM numero_talonario WHERE rifa_id = ( SELECT id FROM talonario WHERE nombre = ? ) AND numero = ?");
+            stmtEstado.setString(1, lotterySelected);
+            stmtEstado.setInt(2, numWin);
+            ResultSet winningResultState = stmtEstado.executeQuery();
+            if (winningResultState.next()) {
+                stateWinning = winningResultState.getString("estado");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return stateWinning;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
