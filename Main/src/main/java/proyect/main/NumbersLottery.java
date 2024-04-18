@@ -98,27 +98,33 @@ public class NumbersLottery extends javax.swing.JFrame {
                 numerosPanel.add(numeroButton);
                 numeroButton.setBackground(Color.GREEN);
                 // Aquí verificamos el estado del número
-                try (Connection conn = ConnectDatabase.getConnection()) {
-                    String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
-                    PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
-                    stmtEstado.setString(1, numbers);
-                    ResultSet resultEstado = stmtEstado.executeQuery();
+                int idTalonario = obtenerIdTalonario(nameLottery);
+                if (obtenerIdTalonario(nameLottery) >= 0) {
+                    try (Connection conn = ConnectDatabase.getConnection()) {
+                        String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ? AND rifa_id = ?";
+                        PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
+                        stmtEstado.setString(1, numbers);
+                        stmtEstado.setInt(2, idTalonario); // Pasa el ID del talonario
+                        ResultSet resultEstado = stmtEstado.executeQuery();
 
-                    if (resultEstado.next()) {
-                        String estadoNumero = resultEstado.getString("estado");
-                        if (estadoNumero.equals("R")) {            //estadoNumero == 'R'
-                            numeroButton.setBackground(Color.yellow); // estado reservado
-                        } else if (estadoNumero.equals("P")) {
-                            numeroButton.setBackground(Color.RED); // estado pagado
-                        } else {
-                            numeroButton.setBackground(Color.GRAY); // estado disponible
+                        if (resultEstado.next()) {
+                            String estadoNumero = resultEstado.getString("estado");
+                            if (estadoNumero.equals("R")) {            //estadoNumero == 'R'
+                                numeroButton.setBackground(Color.yellow); // estado reservado
+                            } else if (estadoNumero.equals("P")) {
+                                numeroButton.setBackground(Color.RED); // estado pagado
+                            } else {
+                                numeroButton.setBackground(Color.GRAY); // estado disponible
+                            }
                         }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-
+                else{
+                    System.out.println("hola");
+                }
                 numeroButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         JButton botonPresionado = (JButton) e.getSource();
@@ -253,7 +259,7 @@ public class NumbersLottery extends javax.swing.JFrame {
 
         String numWinnnn = String.valueOf(numWin);
         try (Connection conn = ConnectDatabase.getConnection()) {
-            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero = ?";
+            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero =?";
             PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
             stmtEstado.setString(1, numWinnnn);
             ResultSet winningResultState = stmtEstado.executeQuery();
@@ -288,7 +294,22 @@ public class NumbersLottery extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+public int obtenerIdTalonario(String nameLottery) {
+    int idTalonario = 0;
+    try (Connection conn = ConnectDatabase.getConnection()) {
+        String sql = "SELECT id FROM talonario WHERE nombre = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, nameLottery);
+        ResultSet result = stmt.executeQuery();
+        if (result.next()) {
+            idTalonario = result.getInt("id"); // Cambiado a "id" en lugar de "id_talonario"
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al obtener el ID del talonario.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    return idTalonario;
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
