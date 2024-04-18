@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-public class InterfaceLottery extends javax.swing.JFrame {
+public class RegisterLottery extends javax.swing.JFrame {
 
-    public InterfaceLottery() {
+    public RegisterLottery() {
         initComponents();
     }
 
@@ -48,9 +48,9 @@ public class InterfaceLottery extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 51, 51));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("Segoe UI Variable", 1, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI Variable", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("INGRESAR INFORMACION");
+        jLabel6.setText("INGRESAR INFORMACIÓN");
 
         textPrize.setBackground(new java.awt.Color(255, 255, 255));
         textPrize.setForeground(new java.awt.Color(0, 0, 0));
@@ -71,7 +71,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("DESCRIPCION DEL TALONARIO");
+        jLabel1.setText("DESCRIPCIÓN DEL TALONARIO");
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
@@ -94,7 +94,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("CANTIDAD DE NUMERO");
+        jLabel3.setText("CANTIDAD DE NÚMERO");
 
         texName.setBackground(new java.awt.Color(255, 255, 255));
         texName.setForeground(new java.awt.Color(0, 0, 0));
@@ -137,14 +137,14 @@ public class InterfaceLottery extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addGap(157, 157, 157))
+                .addGap(123, 123, 123))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
@@ -241,7 +241,7 @@ public class InterfaceLottery extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Menu menu = new Menu();
-        menu.abrir();
+        menu.openMenuWindow();
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -254,11 +254,11 @@ public class InterfaceLottery extends javax.swing.JFrame {
 
             addLottery(NameLottery, sizeLottery, description, price, dateLottery);
             Menu v = new Menu();
-            v.abrir();
+            v.openMenuWindow();
             dispose();
         }
         else{
-            JOptionPane.showMessageDialog(null, " NO SE CREO");
+            JOptionPane.showMessageDialog(null, " No se creó");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -320,24 +320,21 @@ public class InterfaceLottery extends javax.swing.JFrame {
     }
 
     private boolean checkingDate() {
-        Date fechaActual = new Date();
-        Date fechaSeleccionada = jDateChooser1.getDate();
+        Date currentDate = new Date();
+        Date selectedDate = jDateChooser1.getDate();
         //String dateSelectted = this.jDateChooser1; terminar de validar y investigar
 //     if (dateSelectted.isEmpty()) {
 
         //  JOptionPane.showMessageDialog(null,"Debes agregar una fecha :");
         //  return false;
         // }
-        if (fechaSeleccionada.before(fechaActual)) {
+        if (selectedDate.before(currentDate)) {
             JOptionPane.showMessageDialog(null, "Ingrese una fecha valida :");
             return false;
         }
         return true;
     }
-    
- 
-    
-    
+       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

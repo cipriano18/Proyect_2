@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Talonario {
+public class Talonary {
     private static String name;
  
     public static String getName() {
@@ -23,7 +23,7 @@ public class Talonario {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Talonario talonario = new Talonario();
+                Talonary talonario = new Talonary();
                 String name = rs.getString("nombre");
                 talonario.setName(name); 
                 names.add(talonario.getName()); 

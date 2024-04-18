@@ -1,13 +1,13 @@
 package proyect.main;
 
-public class TalonarioSelected {
-    private static String talonarioSelected;
+public class TalonarySelected {
+    private static String talonarySelected;
     
     public static String getTalonarioSelected(){
-        return talonarioSelected;
+        return talonarySelected;
     }
     
     public static void setTalonarioSelected(String TalonarioSelected){
-        talonarioSelected = TalonarioSelected;
+        talonarySelected = TalonarioSelected;
     }
 }
