@@ -55,7 +55,6 @@ public class Menu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setForeground(new java.awt.Color(0, 102, 153));
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\PERSONAL\\Desktop\\Java-files\\Proyecto\\Main\\src\\main\\java\\Images\\icono_inicio1.jpg")); // NOI18N
 
         jLabel2.setBackground(new java.awt.Color(204, 255, 255));
         jLabel2.setFont(new java.awt.Font("Oswald", 0, 24)); // NOI18N
@@ -92,10 +91,9 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        InterfaceLottery vi = new InterfaceLottery(); 
+        RegisterLottery vi = new RegisterLottery(); 
         vi.setVisible(true);
         vi.setLocationRelativeTo(null);
-        vi.setTitle("Crear_talonario");
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -105,11 +103,11 @@ public class Menu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
                              
-public void abrir(){
-    Menu vista=new Menu();
-    vista.setLocationRelativeTo(null);
-    vista.setTitle("Menu_talonario");
-    vista.setVisible(true); 
+public void openMenuWindow(){
+    Menu view = new Menu();
+    view.setLocationRelativeTo(null);
+    view.setTitle("Menu_talonario");
+    view.setVisible(true); 
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
