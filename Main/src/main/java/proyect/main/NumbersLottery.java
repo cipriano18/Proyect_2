@@ -19,9 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class NumbersLottery extends javax.swing.JFrame {
-    
+
     public static int sizeGlobal;
-    
+
     public NumbersLottery() {
         initComponents();
     }
@@ -83,7 +83,7 @@ public class NumbersLottery extends javax.swing.JFrame {
 
             while (result.next()) {
                 numero = result.getString("cantidad_numero");
-                
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,9 +122,6 @@ public class NumbersLottery extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-                else{
-                    System.out.println("hola");
-                }
                 numeroButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         JButton botonPresionado = (JButton) e.getSource();
@@ -142,7 +139,6 @@ public class NumbersLottery extends javax.swing.JFrame {
                         } else {
                             botonPresionado.setBackground(Color.GRAY);
                             botonesGrises.add(botonPresionado);
-                            System.out.println(botonesGrises.size());
                         }
                     }
                 });
@@ -251,65 +247,58 @@ public class NumbersLottery extends javax.swing.JFrame {
         }
     }
 
-    public void rifarNumeros() {
-
-        int sizeNums = sizeGlobal + 1;
-        int numWin = (int) (Math.random() * sizeNums + 1);
-        System.out.println(sizeNums);
-
-        String numWinnnn = String.valueOf(numWin);
-        try (Connection conn = ConnectDatabase.getConnection()) {
-            String sqlEstado = "SELECT estado FROM numero_talonario WHERE numero =?";
-            PreparedStatement stmtEstado = conn.prepareStatement(sqlEstado);
-            stmtEstado.setString(1, numWinnnn);
-            ResultSet winningResultState = stmtEstado.executeQuery();
-
-            if (winningResultState.equals('P')) {
-                try (Connection connn = ConnectDatabase.getConnection()) {
-                    String sqlNombre = "{ ? = call SeleccionarNombre(?) }";
-                    CallableStatement matt = connn.prepareCall(sqlNombre);
-                    matt.registerOutParameter(1, Types.VARCHAR); // Tipo de retorno de la función
-                    matt.setInt(2, 123); // Valor del parámetro p_numero
-
-                    // Ejecutar la llamada a la función
-                    matt.execute();
-
-                    // Obtener el resultado
-                    String nombre = matt.getString(1);
-                    System.out.println("Nombre del participante: " + nombre);
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+public void rifarNumeros() {
+    int sizeNums = sizeGlobal;
+    int numWin = (int) (Math.random() * sizeNums + 1);
+    
+    try (Connection conn = ConnectDatabase.getConnection();
+         PreparedStatement stmtEstado = conn.prepareStatement("SELECT estado FROM numero_talonario WHERE numero = ?");
+         CallableStatement matt = conn.prepareCall("{ ? = call SeleccionarNombre(?, ?) }")) {
+        
+        String lotterySelected = TalonarioSelected.getTalonarioSelected();
+        
+        stmtEstado.setInt(1, numWin); // Corregido el índice del parámetro
+        try (ResultSet winningResultState = stmtEstado.executeQuery()) {
+            if (winningResultState.next()) {
+                String stateWinning = winningResultState.getString("estado");
+                matt.registerOutParameter(1, Types.VARCHAR);
+                matt.setInt(2, numWin);
+                matt.setString(3, lotterySelected); // Pasar el ID del talonario en lugar del nombre
+                matt.execute();
+                String nombre = matt.getString(1);
+                if (stateWinning.equals("P")) {
+                    JOptionPane.showMessageDialog(null,  "El numero ganador es:  " + numWin + "\nNombre del ganador: " + nombre + "\nFELICIDADES!!!");
+                } else if (stateWinning.equals("R")) {
+                    JOptionPane.showMessageDialog(null, "El numero ganador es:  " + numWin + "\nEl numero solo fue reservado asi que no existe un participante ganador");
+                } else {
+                    JOptionPane.showMessageDialog(null, "El numero ganador es:  " + numWin + "\nEl numero no fue comprado ni reservado asi que no existe participante ganador");
                 }
-            } else if (winningResultState.equals("R")) {
-                System.out.println("Nombre del participanteeeeeeee: ");
             } else {
-                System.out.println("SOLO AQUI ENTRAAAAA: ");
-                System.out.println(numWinnnn);
+                JOptionPane.showMessageDialog(null, "No se encontró ningún estado para el número ganador: " + numWin);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-public int obtenerIdTalonario(String nameLottery) {
-    int idTalonario = 0;
-    try (Connection conn = ConnectDatabase.getConnection()) {
-        String sql = "SELECT id FROM talonario WHERE nombre = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, nameLottery);
-        ResultSet result = stmt.executeQuery();
-        if (result.next()) {
-            idTalonario = result.getInt("id"); // Cambiado a "id" en lugar de "id_talonario"
         }
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error al obtener el ID del talonario.", "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-    return idTalonario;
 }
+    public int obtenerIdTalonario(String nameLottery) {
+        int idTalonario = 0;
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            String sql = "SELECT id FROM talonario WHERE nombre = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nameLottery);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                idTalonario = result.getInt("id"); // Cambiado a "id" en lugar de "id_talonario"
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener el ID del talonario.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return idTalonario;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
