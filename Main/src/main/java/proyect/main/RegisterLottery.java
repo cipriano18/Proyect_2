@@ -253,11 +253,10 @@ public class RegisterLottery extends javax.swing.JFrame {
             Date dateLottery = jDateChooser1.getDate();
 
             addLottery(NameLottery, sizeLottery, description, price, dateLottery);
-            Menu v = new Menu();
-            v.openMenuWindow();
+            Menu menu3 = new Menu();
+            menu3.openMenuWindow();
             dispose();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, " No se creó");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -274,8 +273,8 @@ public class RegisterLottery extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_texNameActionPerformed
 
- private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
-   try (Connection conn = ConnectDatabase.getConnection()) {
+    private void addLottery(String name, int sizeLottery, String description, String prize, Date date) {
+        try (Connection conn = ConnectDatabase.getConnection()) {
             try {
                 var stmt = conn.prepareStatement("INSERT INTO talonario (nombre, cantidad_numero, descripcion, premio, fecha) VALUES (?, ?, ?, ?, ?)");
                 stmt.setString(1, name);
@@ -286,13 +285,14 @@ public class RegisterLottery extends javax.swing.JFrame {
 
                 stmt.executeUpdate();
             } catch (SQLException e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
-           e.printStackTrace();
-     }
+            e.printStackTrace();
+        }
 
- }
+    }
+
     private boolean checkingName() {
         String name = texName.getText();
         if (name.isEmpty()) {
@@ -311,9 +311,15 @@ public class RegisterLottery extends javax.swing.JFrame {
 
     private boolean checkingValues() {
         int sizeNumber;
+
         try {
             sizeNumber = Integer.parseInt(textCantNum.getText());
-            return true;
+            
+            if (sizeNumber <= 100) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (NumberFormatException e) {
         }
         return false;
@@ -322,19 +328,14 @@ public class RegisterLottery extends javax.swing.JFrame {
     private boolean checkingDate() {
         Date currentDate = new Date();
         Date selectedDate = jDateChooser1.getDate();
-        //String dateSelectted = this.jDateChooser1; terminar de validar y investigar
-//     if (dateSelectted.isEmpty()) {
 
-        //  JOptionPane.showMessageDialog(null,"Debes agregar una fecha :");
-        //  return false;
-        // }
         if (selectedDate.before(currentDate)) {
             JOptionPane.showMessageDialog(null, "Ingrese una fecha valida :");
             return false;
         }
         return true;
     }
-       
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
