@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 public class NumbersLottery extends javax.swing.JFrame {
 
     public static int sizeNumButtons;
-
+ private boolean verify = true;
     public NumbersLottery() {
         initComponents();
     }
@@ -192,7 +192,13 @@ public class NumbersLottery extends javax.swing.JFrame {
 
         raffleButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                raffleNumbers();
+                if (verify) {
+                 raffleNumbers();
+                  verify=false;
+                }
+            else {
+                  JOptionPane.showMessageDialog(null, "Ya se rifo esta rifa");
+                }
             }
         });
     }
@@ -200,9 +206,7 @@ public class NumbersLottery extends javax.swing.JFrame {
     public void reserveNumber(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
         String opcionSelected = TalonarySelected.getTalonarioSelected();
-        System.out.println(TalonarySelected.getTalonarioSelected());
         try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
-            System.out.println(buttonsOfNumbers.size());
             for (int i = 0; i < buttonsOfNumbers.size(); i++) {
                 int numberSelected = Integer.parseInt(buttonsOfNumbers.get(i).getText());
                 stmt.setInt(1, numberSelected); // Pasa el número del talonario
@@ -224,7 +228,6 @@ public class NumbersLottery extends javax.swing.JFrame {
     public void paid(String nameParticipant) {
         String sql = "{ call insertar_talonario(?, ?, ?, ?) }"; // Llamar al procedimiento almacenado
         String opcionSelected = TalonarySelected.getTalonarioSelected();
-        System.out.println(TalonarySelected.getTalonarioSelected());
         try (Connection conn = ConnectDatabase.getConnection(); CallableStatement stmt = conn.prepareCall(sql)) {
             for (int i = 0; i < buttonsOfNumbers.size(); i++) {
                 int numerSelect = Integer.parseInt(buttonsOfNumbers.get(i).getText());

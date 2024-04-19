@@ -137,18 +137,21 @@ public class BooksOfLottery extends javax.swing.JFrame {
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
         String nameSelected = name.getSelectedValue();
-           System.out.println(nameSelected);
         deleteNumbersAndParticipant(nameSelected);
         loadNamesLoterries();
     }//GEN-LAST:event_DeleteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String nameSelected = name.getSelectedValue();
-        NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
-        lotterySelected.setVisible(true);
-        lotterySelected.setLocationRelativeTo(null);
-        TalonarySelected.setTalonarioSelected(nameSelected);
-        dispose();
+        if (nameSelected != null && !nameSelected.isEmpty()) {
+            NumbersLottery lotterySelected = new NumbersLottery(nameSelected);
+            lotterySelected.setVisible(true);
+            lotterySelected.setLocationRelativeTo(null);
+            TalonarySelected.setTalonarioSelected(nameSelected);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un talonario para ver su información");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void loadNamesLoterries() {
