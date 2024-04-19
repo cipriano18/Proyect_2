@@ -1,5 +1,6 @@
 package proyect.main;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -136,7 +137,9 @@ public class BooksOfLottery extends javax.swing.JFrame {
     }//GEN-LAST:event_CargarActionPerformed
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
-        deleteNamesLoterries();
+        String nameSelected = Nombre.getSelectedValue();
+           System.out.println(nameSelected);
+        deleteNumbersAndParticipant(nameSelected);
         loadNamesLoterries();
     }//GEN-LAST:event_EliminarActionPerformed
 
@@ -160,19 +163,23 @@ public class BooksOfLottery extends javax.swing.JFrame {
         Nombre.setModel(model);
     }
 
-    private void deleteNamesLoterries() {
-        String selectedName = Nombre.getSelectedValue();
-        String query = "DELETE FROM TALONARIO WHERE NOMBRE = ? ";
-        try (Connection conn = ConnectDatabase.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, selectedName);
-            int fila = stmt.executeUpdate();
-            if (fila > 0) {
-                JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+private void deleteNumbersAndParticipant(String lotteryName) {
+    try (Connection conn = ConnectDatabase.getConnection();
+         CallableStatement stmt = conn.prepareCall("{call delete_lottery(?)}")) {
+        
+        // Establecer el parámetro del nombre del talonario
+        stmt.setString(1, lotteryName);
+        
+        // Ejecutar el procedimiento almacenado
+        stmt.execute();
+        
+        JOptionPane.showMessageDialog(null, "Se han eliminado correctamente los registros asociados al talonario " + lotteryName + ".");
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al eliminar registros.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
     public void openBookOfLottery() {
         BooksOfLottery vista = new BooksOfLottery();
         vista.setVisible(true);
