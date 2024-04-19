@@ -163,29 +163,37 @@ public class NumbersLottery extends javax.swing.JFrame {
 
             reserveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
-                    try (Connection conn = ConnectDatabase.getConnection()) {
-                        var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
-                        stmt.setString(1, nameParticipant);
-                        stmt.executeUpdate();
-                        reserveNumber(nameParticipant);
-                    } catch (SQLException es) {
-                        es.printStackTrace();
+                    if (buttonsOfNumbers.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Debes seleccionar al menos un número antes de Reservar.");
+                    } else {
+                        String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
+                        try (Connection conn = ConnectDatabase.getConnection()) {
+                            var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
+                            stmt.setString(1, nameParticipant);
+                            stmt.executeUpdate();
+                            reserveNumber(nameParticipant);
+                        } catch (SQLException es) {
+                            es.printStackTrace();
+                        }
                     }
-
                 }
             });
         }
         payButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
-                try (Connection conn = ConnectDatabase.getConnection()) {
-                    var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
-                    stmt.setString(1, nameParticipant);
-                    stmt.executeUpdate();
-                    paid(nameParticipant);
-                } catch (SQLException es) {
-                    es.printStackTrace();
+
+                if (buttonsOfNumbers.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debes seleccionar al menos un número antes de pagar.");
+                } else {
+                    String nameParticipant = JOptionPane.showInputDialog(null, "ingrese su nombre");
+                    try (Connection conn = ConnectDatabase.getConnection()) {
+                        var stmt = conn.prepareStatement("INSERT INTO participante (nombre_participante) VALUES (?)");
+                        stmt.setString(1, nameParticipant);
+                        stmt.executeUpdate();
+                        paid(nameParticipant);
+                    } catch (SQLException es) {
+                        es.printStackTrace();
+                    }
                 }
             }
         });
@@ -193,11 +201,10 @@ public class NumbersLottery extends javax.swing.JFrame {
         raffleButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (verify) {
-                 raffleNumbers();
-                  verify=false;
-                }
-            else {
-                  JOptionPane.showMessageDialog(null, "Ya se rifo esta rifa");
+                    raffleNumbers();
+                    verify = false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ya se rifo esta rifa");
                 }
             }
         });
