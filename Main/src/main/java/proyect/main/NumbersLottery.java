@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -50,8 +49,8 @@ public class NumbersLottery extends javax.swing.JFrame {
         exitButton = new JButton("Regresar");
         raffleButton = new JButton("Rifar");
         PaidInformation = new JButton("Pago");
-        reserveInformation = new JButton("Reservado");;
-        availableInformation = new JButton("Disponible");;
+        reserveInformation = new JButton("Reservado");
+        availableInformation = new JButton("Disponible");
         reserveButton.setBackground(Color.BLACK);
         reserveButton.setForeground(Color.WHITE);
         payButton.setBackground(Color.BLACK);
@@ -77,7 +76,7 @@ public class NumbersLottery extends javax.swing.JFrame {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+        
         buttonPanel.add(exitButton);
         buttonPanel.add(reserveButton);
         buttonPanel.add(payButton);
@@ -114,7 +113,6 @@ public class NumbersLottery extends javax.swing.JFrame {
                 JButton numberButton = new JButton(numbers);
                 panelNumbers.add(numberButton);
                 numberButton.setBackground(Color.GREEN);
-                // Aquí verificamos el estado del número
                 int idTalonary = getIdTalonary(nameLottery);
                 if (getIdTalonary(nameLottery) >= 0) {
                     try (Connection conn = ConnectDatabase.getConnection()) {
